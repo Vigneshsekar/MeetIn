@@ -1,0 +1,45 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+
+    <!--
+        Customize the content security policy in the meta tag below as needed. Add 'unsafe-inline' to default-src to enable inline JavaScript.
+        For details, see http://go.microsoft.com/fwlink/?LinkID=617521
+    -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: gap: https://ssl.gstatic.com 'unsafe-eval'; style-src 'self' 'unsafe-inline'; media-src *">
+    <title>BlankCordovaApp1</title>
+
+    <!-- BlankCordovaApp1 references -->
+    <link href="css/index.css" rel="stylesheet" />
+    <script src="bower_components/webcomponentsjs/webcomponents-lite.min.js"></script>
+    <link rel="import" href="bower_components/paper-drawer-panel/paper-drawer-panel.html">
+    <link rel="import" href="bower_components/paper-header-panel/paper-header-panel.html">
+    <link rel="import" href="bower_components/paper-toolbar/paper-toolbar.html">
+</head>
+<body>
+    <paper-drawer-panel responsive-width="820px">
+        <paper-header-panel mode="waterfall-tall" tallClass="medium-tall" shadow="true" drawer>
+
+            <paper-toolbar class="drawer_toolbar">
+                <div id="logo">Inside the drawer tool bar</div>
+            </paper-toolbar>
+        </paper-header-panel>
+
+        <paper-header-panel main mode="standard" class="paper_toolbar_main main_content_area">
+
+            <paper-toolbar>
+                Indise the main toll bar
+            </paper-toolbar>
+        </paper-header-panel>
+    </paper-drawer-panel>
+
+                <p>Hello, your application is ready!</p>
+
+                <!-- Cordova reference, this is added to your app when it's built. -->
+                <script src="cordova.js"></script>
+                <script src="scripts/platformOverrides.js"></script>
+
+                <script src="scripts/index.js"></script>
+</body>
+</html>

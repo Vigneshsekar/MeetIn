@@ -1,0 +1,634 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+
+    <!--
+        Customize the content security policy in the meta tag below as needed. Add 'unsafe-inline' to default-src to enable inline JavaScript.
+        For details, see http://go.microsoft.com/fwlink/?LinkID=617521
+    -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: gap: https://ssl.gstatic.com 'unsafe-eval'; style-src 'self' 'unsafe-inline'; media-src *">
+    <title>BlankCordovaApp1</title>
+
+    <!-- BlankCordovaApp1 references -->
+    <link href="css/index.css" rel="stylesheet" />
+    <script src="bower_components/webcomponentsjs/webcomponents-lite.min.js"></script>
+    <script src="http://ajax.aspnetcdn.com/ajax/mobileservices/MobileServices.Web-1.2.5.min.js"></script>
+
+    <link rel="import" href="html/elements.html">
+    
+    <script type="text/javascript" src="http://ecn.dev.virtualearth.net/mapcontrol/mapcontrol.ashx?v=7.0"></script>
+    <script type="text/javascript">
+  var map = null;
+  var searchManager = null;
+
+  var end;
+  var start;
+  var directionsManager;
+  var directionsErrorEventObj;
+  var directionsUpdatedEventObj;
+  function getMap() {
+      map = new Microsoft.Maps.Map(document.getElementById('myMap'), { credentials: 'AkPLktnGGpNTI3S-0a_b0aMFDwm0ZRzALNXi6kLBmNDD6c0A_NGwLHpPCNaUw_TE' });
+
+  }
+
+  function createDirectionsManager() {
+      var displayMessage;
+      if (!directionsManager) {
+          directionsManager = new Microsoft.Maps.Directions.DirectionsManager(map);
+          displayMessage = 'Directions Module loaded\n';
+          displayMessage += 'Directions Manager loaded';
+      }
+      alert(displayMessage);
+      directionsManager.resetDirections();
+      directionsErrorEventObj = Microsoft.Maps.Events.addHandler(directionsManager, 'directionsError', function (arg) { alert(arg.message) });
+      directionsUpdatedEventObj = Microsoft.Maps.Events.addHandler(directionsManager, 'directionsUpdated', function () { alert('Directions updated') });
+  }
+
+  function setRequestOptions() {
+      if (!directionsManager) { createDirectionsManager(); }
+      directionsManager.setRequestOptions({ distanceUnit: Microsoft.Maps.Directions.DistanceUnit.kilometers, routeAvoidance: Microsoft.Maps.Directions.RouteAvoidance.avoidLimitedAccessHighway });
+      if (directionsManager.getAllWaypoints().length < 2) {
+          var sanfranciscoWaypoint = new Microsoft.Maps.Directions.Waypoint({
+              address: 'New Delhi, Delhi, India',              location: new Microsoft.Maps.Location(28.635308, 77.113972)
+          });
+          directionsManager.addWaypoint(sanfranciscoWaypoint);
+          var walnutcreekWaypoint = new Microsoft.Maps.Directions.Waypoint({
+              address: 'DLF Cyber City, Gurgaon District,Haryana',
+              location: new Microsoft.Maps.Location(28.49445, 77.089897)
+          });
+          directionsManager.addWaypoint(walnutcreekWaypoint);
+      }
+      // Set Route Mode to driving
+      directionsManager.setRequestOptions({ routeMode: Microsoft.Maps.Directions.RouteMode.driving });
+      // Set the element in which the itinerary will be rendered
+      directionsManager.setRenderOptions({ itineraryContainer: document.getElementById('directionsItinerary') });
+      alert('Calculating directions...');
+      directionsManager.calculateDirections();
+  }
+
+  function createDirections() {
+      if (!directionsManager) {
+          Microsoft.Maps.loadModule('Microsoft.Maps.Directions', { callback: setRequestOptions });
+      }
+      else {
+          setRequestOptions();
+      }
+  }
+  function printIt()
+  {
+      var timeWithoutTraffic = document.getElementById('dd_tripSummary').innerHTML;
+      document.getElementById('timeDisplayOne').innerHTML = timeWithoutTraffic;
+
+      var timeWithTraffic = document.getElementsByClassName('dd_trafficTime')[0].innerHTML;
+      document.getElementById('timeDisplayTwo').innerHTML = timeWithTraffic;
+
+  }
+
+    </script>
+        
+
+    <style is="custom-style">
+        .list {
+
+            background-color: white;
+            display: block;
+            width: 240px;
+
+            margin-left: auto;
+            margin-right:auto;
+            @apply(--shadow-elevation-2dp);
+
+        }
+
+        .disclaimer{
+            margin-top: 12px;
+            background-color: white;
+            display: block;
+            width: 240px;
+            margin-left: auto;
+            margin-right:auto;
+            @apply(--shadow-elevation-2dp);
+
+        }
+
+        .short {
+
+            height: 216px;
+        }
+
+        h4 {
+            margin-left: 24px;
+        }
+
+        .avatar {
+            display: inline-block;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            overflow: hidden;
+            background: #ccc;
+        }
+
+        .blue {
+            background-color: var(--paper-light-blue-300);
+        }
+
+        .red {
+            background-color: var(--paper-red-300);
+        }
+
+        .orange {
+            background-color: var(--paper-amber-300);
+        }
+
+        .green {
+            background-color: var(--paper-green-300);
+        }
+
+        paper-tabs.cyan::shadow #selectionBar {
+      background-color: #00b8d4;
+    }
+      
+    paper-dropdown-menu {
+      text-align: left;
+      margin: auto;
+      width: 180px;
+    }
+
+
+    .horizontal-section {
+      text-align: center;
+      margin-top: 12px;
+      background-color: white;
+      display: block;
+      width: 240px;
+      margin-left: auto;
+      margin-right:auto;
+      @apply(--shadow-elevation-2dp);
+    
+    }
+
+    paper-button {
+      
+      text-align: center;
+      margin-top: 50px;
+      background-color: white;
+      color : darkcyan;
+
+      display: block;
+      width: 240px;
+      margin-left: auto;
+      margin-right:auto;
+      margin-bottom: 24px;
+      text-transform: none;
+    }
+   
+    </style>
+
+
+
+
+
+</head>
+<body unresolved onload="getMap();">
+    <template is="dom-bind" id="app">
+        <paper-drawer-panel responsive-width="820px">
+            <paper-header-panel mode="waterfall-tall" tallClass="medium-tall" shadow="true" drawer>
+
+                <paper-toolbar style="background-color:#0097a7" class="medium-tall">
+                    <div class="avatar orange middle"></div>
+                    <div class="bottom">Username@domain.com</div>
+                </paper-toolbar>
+
+                <paper-menu selected="{{page}}">
+
+                    <paper-item label="MeetIn" style="position:relative;display:block;">
+                        <paper-ripple></paper-ripple>
+                        <paper-icon-button icon="maps:directions" style="color:#f06292">
+                        </paper-icon-button>
+                        <span style="color:darkcyan">
+                            MeetIn
+                        </span>
+                    </paper-item>
+
+                    <paper-item label="ReachIn" style="position:relative;display:block;">
+                        <paper-ripple></paper-ripple>
+                        <paper-icon-button icon="image:nature-people" style="color:#ff8a65">
+                        </paper-icon-button>
+                        <span style="color:darkcyan">
+                            ReachIn
+                        </span>
+                    </paper-item>
+                </paper-menu>
+            </paper-header-panel>
+
+            <paper-header-panel main mode="standard">
+
+                <paper-toolbar style="background-color:#00b8d4">
+                    <paper-icon-button icon="menu" alt="menu" paper-drawer-toggle>
+                    </paper-icon-button>
+                    <div style="color:white">
+                        MeetIn
+                    </div>
+
+                </paper-toolbar>
+
+                <iron-pages selected="{{page}}" flex>
+                    <section>
+                        <template is="dom-bind" id="bindingTabs">
+                            <paper-tabs selected="{{number}}" class="cyan" noink flex>
+
+                                <paper-tab>Meeting</paper-tab>
+                                <paper-tab>Connections</paper-tab>
+
+                            </paper-tabs>
+
+                            <iron-pages selected="{{number}}">
+                                <div>
+                                    <template id="Demo" is="dom-bind">
+                                        <div class="horizontal-section-container">
+                                            <div>
+                                                <h4>Meeting with</h4>
+                                                <div class="horizontal-section">
+                                                    <paper-icon-item>
+                                                        <div item-icon>
+                                                            <paper-fab icon="supervisor-account" mini style="background-color: #4dd0e1">
+                                                            </paper-fab>
+                                                        </div>
+                                                        <paper-item-body>
+                                                            <paper-dropdown-menu label="Meeting with">
+                                                                <paper-menu class="dropdown-content" style="display:inline-block">
+                                                                    <template is="dom-repeat" items="[[connections]]" as="connection">
+                                                                        <paper-icon-item>[[connection]]</paper-icon-item>
+                                                                    </template>
+                                                                </paper-menu>
+                                                            </paper-dropdown-menu>
+                                                        </paper-item-body>
+                                                    </paper-icon-item>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </template>
+
+                                    <div>
+                                        <h4>Meeting at</h4>
+                                        <div class="list" role="list">
+                                            <paper-icon-item>
+                                                <div item-icon>
+                                                    <paper-fab icon="maps:directions-bike" mini style="background-color: #81c784">
+                                                    </paper-fab>
+                                                </div>
+                                                <paper-item-body two-line>
+                                                    <div><paper-input label="My current location" disabled></paper-input></div>
+                                                    <div secondary>Your current location</div>
+                                                </paper-item-body>
+                                            </paper-icon-item>
+                                        </div>
+                                        <div class="disclaimer" role="list">
+                                            <paper-icon-item>
+                                                <div item-icon>
+                                                    <paper-fab icon="maps:place" mini style="background-color: #ff8a65">
+                                                    </paper-fab>
+                                                </div>
+                                                <paper-item-body two-line>
+                                                    <div><paper-input label="DLF Cyber City, Gurgaon District,Haryana"></paper-input></div>
+                                                    <div secondary>Eg:Gurgaon,Haryana</div>
+
+                                                </paper-item-body>
+                                            </paper-icon-item>
+                                        </div>
+
+                                    </div>
+
+                                    <div>
+                                        <paper-button class="ripple" onclick="createDirections();">
+                                            <iron-icon icon="maps:directions" style="color: #f06292">
+                                            </iron-icon>
+                                            MeetIn
+                                        </paper-button>
+                                    </div>
+
+                                    <div>
+                                        <h4>You both may MeetIn</h4>
+                                        <div class="disclaimer" role="list" style="padding-top:12px;">
+                                            <paper-icon-item>
+                                                <div item-icon>
+                                                    <paper-fab icon="maps:directions-run" mini style="background-color:#ba68c8">
+                                                    </paper-fab>
+                                                </div>
+                                                <div id="timeDisplayOne"></div>
+                                            </paper-icon-item>
+                                        </div>
+                                        <div class="disclaimer" role="list" style="padding-top:12px;">
+                                            <paper-icon-item>
+                                                <div item-icon>
+                                                    <paper-fab icon="maps:directions-walk" mini style="background-color:#e57373">
+                                                    </paper-fab>
+                                                </div>
+                                                <div id="timeDisplayTwo"></div>
+                                            </paper-icon-item>
+                                        </div>
+                                    </div>
+
+                                    <div>
+                                        <paper-button class="ripple" onclick="printIt();">
+                                            <iron-icon icon="maps:directions" style="color: #f06292">
+                                            </iron-icon>
+                                            MeetIn (Refresh)
+                                        </paper-button>
+                                    </div>
+                                <div>
+                                    <h4 style="text-align:center; color:grey">
+                                        You can refresh only once in 10 Minutes.
+                                    </h4>
+                                </div>
+
+                                    <div id='directionsItinerary' style="display: none;"> </div>
+                                </div>
+                                <div>
+                                    <h4>Your connections</h4>
+                                    <div class="list short" role="list">
+                                        <paper-icon-item>
+                                            <div class="avatar orange" item-icon></div>
+                                            <div class="flex">Arun</div>
+                                            <paper-checkbox></paper-checkbox>
+                                        </paper-icon-item>
+                                        <paper-icon-item>
+                                            <div class="avatar green" item-icon></div>
+                                            <div class="flex">Menaka</div>
+                                            <paper-checkbox checked></paper-checkbox>
+                                        </paper-icon-item>
+                                        <paper-icon-item>
+                                            <div class="avatar blue" item-icon></div>
+                                            <div class="flex">GuruBaran</div>
+                                            <paper-checkbox></paper-checkbox>
+                                        </paper-icon-item>
+                                        <paper-icon-item>
+                                            <div class="avatar red" item-icon></div>
+                                            <div class="flex">AshwinKumar</div>
+                                            <paper-checkbox></paper-checkbox>
+                                        </paper-icon-item>
+                                    </div>
+
+
+                                    <h4>Make new connections</h4>
+                                    <div>
+                                        <div class="disclaimer" role="list">
+                                            <paper-icon-item>
+                                                <div item-icon>
+                                                    <paper-fab icon="swap-horiz" mini style="background-color:#a1887f" onclick="generateOtp();">
+                                                    </paper-fab>
+                                                </div>
+                                                <paper-item-body two-line>
+                                                    <div id="otp">Generate OT Pass code</div>
+                                                    <div secondary id="otp_helpOne">Click on the left</div>
+                                                    <div secondary id="otp_helpTwo">to generate.</div>
+                                                </paper-item-body>
+                                            </paper-icon-item>
+                                        </div>
+                                    </div>
+
+                                    <h4>Add new connections</h4>
+                                    <div>
+                                        <div class="disclaimer" role="list">
+                                            <paper-icon-item>
+                                                <div item-icon>
+                                                    <paper-fab icon="verified-user" mini style="background-color: #ff8a65" onclick="approveOtp();">
+                                                    </paper-fab>
+                                                </div>
+                                                <paper-item-body two-line>
+                                                    <div><paper-input label="One time passcode"></paper-input></div>
+                                                    <div secondary id="approve_helpOne">Click on the left</div>
+                                                    <div secondary id="approve_helpTwo">to approve.</div>
+                                                </paper-item-body>
+                                            </paper-icon-item>
+                                        </div>
+                                    </div>
+
+                                    <h4>Hold on,Please!</h4>
+                                    <div>
+                                        <div class="disclaimer" role="list">
+                                            <paper-icon-item>
+                                                <div item-icon>
+                                                    <iron-icon icon="favorite" style="color: #e91e63">
+                                                    </iron-icon>
+                                                </div>
+                                                <paper-item-body two-line>
+                                                    <div>We care your Privacy!</div>
+                                                    <div secondary>Share permissions only</div>
+                                                    <div secondary>with people you trust.</div>
+                                                </paper-item-body>
+                                            </paper-icon-item>
+                                        </div>
+                                    </div>
+                                </div>
+                            </iron-pages>
+                        </template>
+                    </section>
+                    <section>
+                        <template is="dom-bind" id="bindingTabs_reachIn">
+                            <paper-tabs selected="{{number}}" class="cyan" noink flex>
+
+                                <paper-tab>Safe journey</paper-tab>
+                                <paper-tab>Connections</paper-tab>
+
+                            </paper-tabs>
+
+                            <iron-pages selected="{{number}}">
+                                <div>
+                                    <template id="Demo_reachIn" is="dom-bind">
+                                        <div class="horizontal-section-container">
+                                            <div>
+                                                <h4>We will notify</h4>
+                                                <div class="horizontal-section">
+                                                    <paper-icon-item>
+                                                        <div item-icon>
+                                                            <paper-fab icon="supervisor-account" mini style="background-color: #ba68c8">
+                                                            </paper-fab>
+                                                        </div>
+                                                        <paper-item-body>
+                                                            <paper-dropdown-menu label="Notify">
+                                                                <paper-menu class="dropdown-content" style="display:inline-block">
+                                                                    <template is="dom-repeat" items="[[connections]]" as="connection">
+                                                                        <paper-icon-item>[[connection]]</paper-icon-item>
+                                                                    </template>
+                                                                </paper-menu>
+                                                            </paper-dropdown-menu>
+                                                        </paper-item-body>
+                                                    </paper-icon-item>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </template>
+
+                                    <div>
+                                        <h4>As soon as you're close to</h4>
+                                        <div class="disclaimer" role="list">
+                                            <paper-icon-item>
+                                                <div item-icon>
+                                                    <paper-fab icon="maps:place" mini style="background-color: #4db6ac">
+                                                    </paper-fab>
+                                                </div>
+                                                <paper-item-body two-line>
+                                                    <div><paper-input label="To"></paper-input></div>
+                                                    <div secondary>Eg:Gurgaon,Haryana</div>
+
+                                                </paper-item-body>
+                                            </paper-icon-item>
+                                        </div>
+
+                                    </div>
+
+                                    <div>
+                                        <paper-button class="ripple" onclick=" ">
+                                            <iron-icon icon="image:nature-people" style="color: #ff8a65">
+                                            </iron-icon>
+                                            ReachIn
+                                        </paper-button>
+                                    </div>
+                                </div>
+                                <div>
+                                    <h4>Your connections</h4>
+                                    <div class="list short" role="list">
+                                        <paper-icon-item>
+                                            <div class="avatar orange" item-icon></div>
+                                            <div class="flex">Arun</div>
+                                            <paper-checkbox></paper-checkbox>
+                                        </paper-icon-item>
+                                        <paper-icon-item>
+                                            <div class="avatar green" item-icon></div>
+                                            <div class="flex">Menaka</div>
+                                            <paper-checkbox checked></paper-checkbox>
+                                        </paper-icon-item>
+                                        <paper-icon-item>
+                                            <div class="avatar blue" item-icon></div>
+                                            <div class="flex">GuruBaran</div>
+                                            <paper-checkbox></paper-checkbox>
+                                        </paper-icon-item>
+                                        <paper-icon-item>
+                                            <div class="avatar red" item-icon></div>
+                                            <div class="flex">AshwinKumar</div>
+                                            <paper-checkbox></paper-checkbox>
+                                        </paper-icon-item>
+                                    </div>
+
+
+                                    <h4>Make new connections</h4>
+                                    <div>
+                                        <div class="disclaimer" role="list">
+                                            <paper-icon-item>
+                                                <div item-icon>
+                                                    <paper-fab icon="swap-horiz" mini style="background-color:#a1887f" onclick="generateOtp();">
+                                                    </paper-fab>
+                                                </div>
+                                                <paper-item-body two-line>
+                                                    <div id="otp">Generate OT Pass code</div>
+                                                    <div secondary id="otp_helpOne">Click on the left</div>
+                                                    <div secondary id="otp_helpTwo">to generate.</div>
+                                                </paper-item-body>
+                                            </paper-icon-item>
+                                        </div>
+                                    </div>
+
+                                    <h4>Add new connections</h4>
+                                    <div>
+                                        <div class="disclaimer" role="list">
+                                            <paper-icon-item>
+                                                <div item-icon>
+                                                    <paper-fab icon="verified-user" mini style="background-color: #ff8a65" onclick="approveOtp();">
+                                                    </paper-fab>
+                                                </div>
+                                                <paper-item-body two-line>
+                                                    <div><paper-input label="One time passcode"></paper-input></div>
+                                                    <div secondary id="approve_helpOne">Click on the left</div>
+                                                    <div secondary id="approve_helpTwo">to approve.</div>
+                                                </paper-item-body>
+                                            </paper-icon-item>
+                                        </div>
+                                    </div>
+
+                                    <h4>Hold on,Please!</h4>
+                                    <div>
+                                        <div class="disclaimer" role="list">
+                                            <paper-icon-item>
+                                                <div item-icon>
+                                                    <iron-icon icon="favorite" style="color: #e91e63">
+                                                    </iron-icon>
+                                                </div>
+                                                <paper-item-body two-line>
+                                                    <div>We care your Privacy!</div>
+                                                    <div secondary>Share permissions only</div>
+                                                    <div secondary>with people you trust.</div>
+                                                </paper-item-body>
+                                            </paper-icon-item>
+                                        </div>
+                                    </div>
+                                </div>
+                            </iron-pages>
+                        </template>
+                    </section>
+                </iron-pages>
+              </paper-header-panel>
+        </paper-drawer-panel>
+    </template>
+    <div id='myMap' style="display:none"></div>
+
+        <!-- Cordova reference, this is added to your app when it's built. -->
+        <script src="cordova.js"></script>
+        <script src="scripts/platformOverrides.js"></script>
+        <script src="scripts/jquery-1.11.1.min.js"></script>
+        <script src="scripts/index.js"></script>
+        <script>
+            document.addEventListener('WebComponentsReady', function () {
+                var bindingTabs = document.querySelector("template#bindingTabs");
+                var bindingTabs_reachIn = document.querySelector("template#bindingTabs_reachIn");
+
+                
+                var Demo = document.querySelector("template#Demo");
+                Demo.connections = [
+                                  'Arun',
+                                  'Menaka',
+                                  'GuruBaran',
+                                  'AshwinKumar'
+                ];
+                var Demo_reachIn = document.querySelector("template#Demo_reachIn");
+                Demo_reachIn.connections = [
+                                  'Arun',
+                                  'Menaka',
+                                  'GuruBaran',
+                                  'AshwinKumar'
+                ];
+                
+
+                bindingTabs.number = 0; // selected is an index by default
+                bindingTabs_reachIn.number = 0;
+
+                //Template for drawer panel
+                var template = document.querySelector('template#app');
+                template.page = 0;
+            });
+
+
+            function generateOtp() {
+                var tempOne = Math.floor((Math.random() * 1000) + 1);
+                var tempTwo = Math.floor((Math.random() * 1000) + 1);
+                var tempThree = Math.floor((Math.random() * 1000) + 1);
+                var otp = tempOne + '-' + tempTwo + '-' + tempThree;
+                document.getElementById('otp').textContent = otp;
+                document.getElementById('otp_helpOne').textContent = 'Share this onetime';
+                document.getElementById('otp_helpTwo').textContent = 'passcode personally!';
+
+            }
+
+            function approveOtp() {
+                document.getElementById('approve_helpOne').textContent = 'Sorry';
+                document.getElementById('approve_helpTwo').textContent = 'Service unavailable.';
+            }
+
+
+        </script>
+</body>
+</html>

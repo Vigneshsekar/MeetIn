@@ -1,0 +1,57 @@
+{
+    "prepare_queue": {
+        "installed": [],
+        "uninstalled": []
+    },
+    "config_munge": {
+        "files": {
+            "Properties/WMAppManifest.xml": {
+                "parents": {
+                    "/Deployment/App/Capabilities": [
+                        {
+                            "xml": "<Capability Name=\"ID_CAP_NETWORKING\" />",
+                            "count": 3
+                        },
+                        {
+                            "xml": "<Capability Name=\"ID_CAP_LOCATION\" />",
+                            "count": 1
+                        }
+                    ]
+                }
+            },
+            "config.xml": {
+                "parents": {
+                    "/*": [
+                        {
+                            "xml": "<feature name=\"InAppBrowser\"><param name=\"wp-package\" value=\"InAppBrowser\" /></feature>",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"NetworkStatus\"><param name=\"wp-package\" value=\"NetworkStatus\" /></feature>",
+                            "count": 1
+                        }
+                    ]
+                }
+            }
+        }
+    },
+    "installed_plugins": {
+        "cordova-plugin-whitelist": {
+            "PACKAGE_NAME": "{706e5a90-6544-11e5-91ee-bfdb1000974d}"
+        },
+        "com.microsoft.azure-mobile-services": {
+            "PACKAGE_NAME": "{706e5a90-6544-11e5-91ee-bfdb1000974d}"
+        },
+        "cordova-plugin-geolocation": {
+            "PACKAGE_NAME": "{706e5a90-6544-11e5-91ee-bfdb1000974d}"
+        },
+        "cordova-plugin-network-information": {
+            "PACKAGE_NAME": "{706e5a90-6544-11e5-91ee-bfdb1000974d}"
+        }
+    },
+    "dependent_plugins": {
+        "org.apache.cordova.inappbrowser": {
+            "PACKAGE_NAME": "{706e5a90-6544-11e5-91ee-bfdb1000974d}"
+        }
+    }
+}

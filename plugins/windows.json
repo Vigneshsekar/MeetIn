@@ -1,0 +1,39 @@
+{
+    "prepare_queue": {
+        "installed": [],
+        "uninstalled": []
+    },
+    "config_munge": {
+        "files": {
+            "package.appxmanifest": {
+                "parents": {
+                    "/Package/Capabilities": [
+                        {
+                            "xml": "<DeviceCapability Name=\"location\" />",
+                            "count": 1
+                        }
+                    ]
+                }
+            }
+        }
+    },
+    "installed_plugins": {
+        "cordova-plugin-whitelist": {
+            "PACKAGE_NAME": "BlankCordovaApp1"
+        },
+        "com.microsoft.azure-mobile-services": {
+            "PACKAGE_NAME": "BlankCordovaApp1"
+        },
+        "cordova-plugin-geolocation": {
+            "PACKAGE_NAME": "BlankCordovaApp1"
+        },
+        "cordova-plugin-network-information": {
+            "PACKAGE_NAME": "BlankCordovaApp1"
+        }
+    },
+    "dependent_plugins": {
+        "org.apache.cordova.inappbrowser": {
+            "PACKAGE_NAME": "BlankCordovaApp1"
+        }
+    }
+}
