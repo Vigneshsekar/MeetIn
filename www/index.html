@@ -19,6 +19,7 @@
     
     <script type="text/javascript" src="http://ecn.dev.virtualearth.net/mapcontrol/mapcontrol.ashx?v=7.0"></script>
     <script type="text/javascript">
+ 
   var map = null;
   var searchManager = null;
 
@@ -27,6 +28,7 @@
   var directionsManager;
   var directionsErrorEventObj;
   var directionsUpdatedEventObj;
+  
   function getMap() {
       map = new Microsoft.Maps.Map(document.getElementById('myMap'), { credentials: 'AkPLktnGGpNTI3S-0a_b0aMFDwm0ZRzALNXi6kLBmNDD6c0A_NGwLHpPCNaUw_TE' });
 
@@ -46,37 +48,49 @@
   }
 
   function setRequestOptions() {
+      
       if (!directionsManager) { createDirectionsManager(); }
       directionsManager.setRequestOptions({ distanceUnit: Microsoft.Maps.Directions.DistanceUnit.kilometers, routeAvoidance: Microsoft.Maps.Directions.RouteAvoidance.avoidLimitedAccessHighway });
+      
       if (directionsManager.getAllWaypoints().length < 2) {
           var sanfranciscoWaypoint = new Microsoft.Maps.Directions.Waypoint({
-              address: 'New Delhi, Delhi, India',              location: new Microsoft.Maps.Location(28.635308, 77.113972)
+              address: 'New Delhi, Delhi, India',
+              location: new Microsoft.Maps.Location(28.635308, 77.113972)
           });
+          
           directionsManager.addWaypoint(sanfranciscoWaypoint);
+          
           var walnutcreekWaypoint = new Microsoft.Maps.Directions.Waypoint({
               address: 'DLF Cyber City, Gurgaon District,Haryana',
               location: new Microsoft.Maps.Location(28.49445, 77.089897)
           });
+          
           directionsManager.addWaypoint(walnutcreekWaypoint);
       }
+      
       // Set Route Mode to driving
       directionsManager.setRequestOptions({ routeMode: Microsoft.Maps.Directions.RouteMode.driving });
+      
       // Set the element in which the itinerary will be rendered
       directionsManager.setRenderOptions({ itineraryContainer: document.getElementById('directionsItinerary') });
-      alert('Calculating directions...');
+      
+      alert("Calculating directions...");
       directionsManager.calculateDirections();
   }
 
   function createDirections() {
+      
       if (!directionsManager) {
           Microsoft.Maps.loadModule('Microsoft.Maps.Directions', { callback: setRequestOptions });
       }
       else {
           setRequestOptions();
       }
+      
   }
   function printIt()
   {
+      
       var timeWithoutTraffic = document.getElementById('dd_tripSummary').innerHTML;
       document.getElementById('timeDisplayOne').innerHTML = timeWithoutTraffic;
 
@@ -89,6 +103,7 @@
         
 
     <style is="custom-style">
+        
         .list {
 
             background-color: white;
@@ -147,7 +162,7 @@
         }
 
         paper-tabs.cyan::shadow #selectionBar {
-      background-color: #00b8d4;
+        background-color: #00b8d4;
     }
       
     paper-dropdown-menu {
@@ -158,6 +173,7 @@
 
 
     .horizontal-section {
+      
       text-align: center;
       margin-top: 12px;
       background-color: white;
@@ -166,7 +182,7 @@
       margin-left: auto;
       margin-right:auto;
       @apply(--shadow-elevation-2dp);
-    
+      
     }
 
     paper-button {
@@ -182,6 +198,7 @@
       margin-right:auto;
       margin-bottom: 24px;
       text-transform: none;
+      
     }
    
     </style>
@@ -226,17 +243,14 @@
             <paper-header-panel main mode="standard">
 
                 <paper-toolbar style="background-color:#00b8d4">
-                    <paper-icon-button icon="menu" alt="menu" paper-drawer-toggle>
-                    </paper-icon-button>
-                    <div style="color:white">
-                        MeetIn
-                    </div>
-
+                    <paper-icon-button icon="menu" alt="menu" paper-drawer-toggle></paper-icon-button>
+                    <div style="color:white">MeetIn</div>
                 </paper-toolbar>
 
                 <iron-pages selected="{{page}}" flex>
                     <section>
                         <template is="dom-bind" id="bindingTabs">
+                            
                             <paper-tabs selected="{{number}}" class="cyan" noink flex>
 
                                 <paper-tab>Meeting</paper-tab>
@@ -252,19 +266,24 @@
                                                 <h4>Meeting with</h4>
                                                 <div class="horizontal-section">
                                                     <paper-icon-item>
+                                                        
                                                         <div item-icon>
                                                             <paper-fab icon="supervisor-account" mini style="background-color: #4dd0e1">
                                                             </paper-fab>
                                                         </div>
+                                                        
                                                         <paper-item-body>
                                                             <paper-dropdown-menu label="Meeting with">
                                                                 <paper-menu class="dropdown-content" style="display:inline-block">
+                                                                   
                                                                     <template is="dom-repeat" items="[[connections]]" as="connection">
                                                                         <paper-icon-item>[[connection]]</paper-icon-item>
                                                                     </template>
+                                                                    
                                                                 </paper-menu>
                                                             </paper-dropdown-menu>
                                                         </paper-item-body>
+                                                        
                                                     </paper-icon-item>
                                                 </div>
 
